@@ -51,28 +51,71 @@ $(function() {
 
   // Comments button
   $(document).on("click", ".commentBtn", function() {
-    $("#write-comment").empty();
     $("#comments").empty();
+    var thisId = $(this).attr("data-id");
+    getComments(thisId);
+  });
 
+  // When you click the save-comment button
+  $(document).on("click", "#save-comment", function() {
     var thisId = $(this).attr("data-id");
 
+    var username = $("#username-input")
+      .val()
+      .trim();
+    var comment = $("#bodyinput")
+      .val()
+      .trim();
+
+    if (username === "" && comment === "") {
+      $("#username-input").attr("placeholder", "You must enter a username");
+      $("#bodyinput").attr("placeholder", "You must enter a comment");
+    } else {
+      $.ajax({
+        method: "POST",
+        url: "/articles/" + thisId,
+        data: {
+          username: username,
+          body: comment
+        }
+      }).then(function(data) {
+        console.log(data);
+        getComments(thisId);
+        $("#commentsModal").modal("show");
+      });
+
+      // Also, remove the values entered in the input and textarea for note entry
+      $("#username-input").val("");
+      $("#bodyinput").val("");
+    }
+  });
+
+  $(document).on("click", ".delBtn", function() {
+    var noteId = $(this).attr("data-noteId");
+    var articleId = $(this).attr("data-articleId");
+
     $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
+      method: "POST",
+      url: "/notes/" + noteId,
+      data: {
+        articleId: articleId
+      }
     }).then(function(data) {
       console.log(data);
+      getComments(articleId);
+      $("#commentsModal").modal("show");
+    });
+  });
+
+  function getComments(articleId) {
+    $.ajax({
+      method: "GET",
+      url: "/articles/" + articleId
+    }).then(function(data) {
+      console.log(data);
+      $("#comments").empty();
       $("#comments-header").text(data.title);
-      $("#write-comment").append(
-        "<input id='username-input' name='username' >"
-      );
-      $("#write-comment").append(
-        "<textarea id='bodyinput' name='body'></textarea>"
-      );
-      $("#write-comment").append(
-        "<button data-id='" +
-          data._id +
-          "' id='save-comment'>Save Note</button>"
-      );
+      $("#save-comment").attr("data-id", data._id);
 
       console.log(data.comments);
       if (data.comments) {
@@ -88,9 +131,9 @@ $(function() {
           let footer = $("<footer>").text(note.username);
           footer.attr("class", "blockquote-footer");
           let delBtn = $("<button>").text("Delete Comment");
-          delBtn.attr("class", "btn btn-danger delBtn");
+          delBtn.attr("class", "btn btn-danger btn-sm delBtn");
           delBtn.attr("data-noteId", note._id);
-          delBtn.attr("data-articleId", thisId);
+          delBtn.attr("data-articleId", articleId);
 
           // Append elements
           quote.append(p);
@@ -98,45 +141,9 @@ $(function() {
           quote.append(delBtn);
           body.append(quote);
           card.append(body);
-          $("#comments").append(card);
+          $("#comments").prepend(card);
         });
       }
     });
-  });
-
-  // When you click the save-comment button
-  $(document).on("click", "#save-comment", function() {
-    var thisId = $(this).attr("data-id");
-
-    $.ajax({
-      method: "POST",
-      url: "/articles/" + thisId,
-      data: {
-        username: $("#username-input").val(),
-        body: $("#bodyinput").val()
-      }
-    }).then(function(data) {
-      console.log(data);
-      $("#notes").empty();
-    });
-
-    // Also, remove the values entered in the input and textarea for note entry
-    $("#username-input").val("");
-    $("#bodyinput").val("");
-  });
-
-  $(document).on("click", ".delBtn", function() {
-    var noteId = $(this).attr("data-noteId");
-    var articleId = $(this).attr("data-articleId");
-
-    $.ajax({
-      method: "POST",
-      url: "/notes/" + noteId,
-      data: {
-        articleId: articleId
-      }
-    }).then(function(data) {
-      console.log(data);
-    });
-  });
+  }
 });

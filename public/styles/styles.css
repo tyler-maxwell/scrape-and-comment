@@ -1,0 +1,74 @@
+.jumbotron {
+  background-color: firebrick;
+  color: blanchedalmond;
+}
+
+.jumbotron hr {
+  background-color: blanchedalmond;
+}
+
+#scrapeBtn {
+  background-color: blanchedalmond;
+  color: black;
+  border-color: blanchedalmond;
+  font-weight: bold;
+}
+
+#scrapeBtn:hover {
+  background-color: burlywood;
+  border-color: burlywood;
+}
+
+a {
+  color: steelblue;
+}
+
+#articles .card {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#articles .card .card-header {
+  background-color: steelblue;
+}
+
+#articles .card .card-header a {
+  color: white;
+}
+
+.btn-primary {
+  background-color: steelblue;
+  border-color: steelblue;
+}
+
+.btn-primary:hover {
+  background-color: darkblue;
+}
+
+.modal-header {
+  background-color: steelblue;
+  color: white;
+}
+
+.modal-header button {
+  color: white;
+  opacity: 100;
+}
+
+.modal-header button:hover {
+  color: grey;
+  opacity: 100;
+}
+
+input {
+  width: 30%;
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+}
+
+.delBtn {
+  margin-top: 15px;
+}

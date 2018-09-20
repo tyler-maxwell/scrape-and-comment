@@ -7,7 +7,7 @@
 </div>
 
 <div class="container">
-    <h1 class="display-4">Articles</h1>
+    <h1 class="display-4">Articles from <a href="https://theconversation.com/us">The Conversation</a></h1>
     <div id="articles"></div>
 </div>
 
@@ -21,12 +21,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="write-comment"></div>
+                <div id="write-comment">
+                    <form>
+                        <div class="form-group">
+                            <input id='username-input' name='username' placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <textarea id='bodyinput' name='body' placeholder="type your comment here"></textarea>
+                        </div>
+                    </form>
+                    <button class="btn btn-success" data-id='' id='save-comment'>Submit Comment</button>
+
+                </div>
                 <hr>
                 <div id="comments"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
