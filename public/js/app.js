@@ -77,8 +77,28 @@ $(function() {
       console.log(data.comments);
       if (data.comments) {
         data.comments.forEach(note => {
+          // Create elements
+          let card = $("<div>");
+          card.attr("class", "card");
+          let body = $("<div>");
+          body.attr("class", "card-body");
+          let quote = $("<blockquote>");
+          quote.attr("class", "blockquote mb-0");
           let p = $("<p>").text(note.body);
-          $("#comments").append(p);
+          let footer = $("<footer>").text(note.username);
+          footer.attr("class", "blockquote-footer");
+          let delBtn = $("<button>").text("Delete Comment");
+          delBtn.attr("class", "btn btn-danger delBtn");
+          delBtn.attr("data-noteId", note._id);
+          delBtn.attr("data-articleId", thisId);
+
+          // Append elements
+          quote.append(p);
+          quote.append(footer);
+          quote.append(delBtn);
+          body.append(quote);
+          card.append(body);
+          $("#comments").append(card);
         });
       }
     });
@@ -95,15 +115,28 @@ $(function() {
         username: $("#username-input").val(),
         body: $("#bodyinput").val()
       }
-    })
-      // With that done
-      .then(function(data) {
-        console.log(data);
-        $("#notes").empty();
-      });
+    }).then(function(data) {
+      console.log(data);
+      $("#notes").empty();
+    });
 
     // Also, remove the values entered in the input and textarea for note entry
     $("#username-input").val("");
     $("#bodyinput").val("");
+  });
+
+  $(document).on("click", ".delBtn", function() {
+    var noteId = $(this).attr("data-noteId");
+    var articleId = $(this).attr("data-articleId");
+
+    $.ajax({
+      method: "POST",
+      url: "/notes/" + noteId,
+      data: {
+        articleId: articleId
+      }
+    }).then(function(data) {
+      console.log(data);
+    });
   });
 });
